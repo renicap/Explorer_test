@@ -1,0 +1,66 @@
+﻿<Window x:Class="CKRT_Test.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CKRT_Test"
+        mc:Ignorable="d"
+        Title="Explorer" Height="450" Width="800"
+        Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <local:FolderCollection x:Key="FolderInfoDataSource"/>
+
+        <DataTemplate x:Key="FolderTemplate">
+            <StackPanel Margin="5" Width="80" Height="70" VerticalAlignment="Top">
+                <TextBlock x:Name="TextBlock_Icon" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Top" 
+                           FontSize="24" Margin="0" HorizontalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=Type}" Value="directory">
+                                    <Setter Property="Text" Value="&#xE8D5;" />
+                                    <Setter Property="Foreground" Value="Orange" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=Type}" Value="parent">
+                                    <Setter Property="Text" Value="&#xED25;" />
+                                    <Setter Property="Foreground" Value="Orange" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=Type}" Value="file">
+                                    <Setter Property="Text" Value="&#xE8A5;" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock HorizontalAlignment="Center" Text="{Binding Path=Name}" Width="Auto" VerticalAlignment="Center" 
+                           Height="Auto" TextWrapping="Wrap"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="26" Margin="20,0,20,0">
+            <TextBox x:Name="TextBox_JsonFile" KeyUp="TextBox_JsonFile_KeyUp"/>
+        </Border>
+
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20,0,20,20" Grid.Row="1">
+            <ListBox x:Name="ListBox_Folders" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ItemsSource="{Binding Mode=OneWay, Source={StaticResource FolderInfoDataSource}}" 
+                     ItemTemplate="{StaticResource FolderTemplate}"
+                     MouseDoubleClick="ListBox_Folders_MouseDoubleClick" 
+                     KeyUp="ListBox_Folders_KeyUp">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </Border>
+    </Grid>
+</Window>
